@@ -68,5 +68,14 @@ def main():
     peaksA.to_csv(outBedA, sep="\t", index=False, header=None, quoting=csv.QUOTE_NONE)
     peaksB.to_csv(outBedB, sep="\t", index=False, header=None, quoting=csv.QUOTE_NONE)
 
+    dar =  df[(df.fc <= -np.log2(fold_change)) or (df.fc <= np.log2(fold_change)) & (df.pvalue < p_value)].copy()
+    dar.loc[:, 'id'] = [f'dar_{i}' for i in range(1, len(dar) + 1)]
+    dar.loc[:, 'fc2'] = dar.fc.map("{:.2f}".format)
+    dar.loc[:, 'pvalue2'] = dar.pvalue.map("{:.2f}".format)
+    dar = dar[['chrom', 'start', 'end', 'id',  'pvalue2', 'fc2']]
+
+    dar.to_csv("dar.txt", sep="\t", index=False, header=None, quoting=csv.QUOTE_NONE)
+
+
 if __name__ == '__main__':
     main()
