@@ -56,12 +56,18 @@ dashboardPage(
       tabItem(tabName = "idr",
         h2("Irreproducible Discovery Rate (IDR) Analyses"),
          fluidRow(
-        box(fileInput("atac_file1_idr", "Upload Replicate1 Peaks File (.narrowPeaks)"),
-        fileInput("atac_file2_idr", "Upload Replicate2 Peaks File (.narrowPeaks)"),
+        box(fileInput("atac_file1_idr", "Upload Replicate 1 Peaks File (.narrowPeaks)"),
+        fileInput("atac_file2_idr", "Upload Replicate 2 Peaks File (.narrowPeaks)"),
         actionButton("generate_button_idr", "Generate Figure"),
         actionButton("clear_button_idr", "Clear All"),height = 500),
 
-        box(shinycssloaders::withSpinner(plotlyOutput("idr_plot"), color = "grey"),height = 500)
+        # box(shinycssloaders::withSpinner(plotlyOutput("idr_plot"), color = "grey"),height = 500),
+        box(
+          h3(textOutput('idr_para')),
+          h3(textOutput('idr_value')),
+          shinycssloaders::withSpinner(plotlyOutput('idr_plot'), color = "grey"),
+          height = 500)
+
       ))
 
 
