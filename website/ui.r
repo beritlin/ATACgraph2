@@ -21,7 +21,7 @@ dashboardPage(
       menuItem("Correlation Analyses", tabName = "geneexpress", icon = icon("chart-line")),
       menuItem("Differentially Peaks", tabName = "dep", icon = icon("chart-bar")),
       menuItem("Peak Distribution", tabName = "enrich", icon = icon("chart-column")),
-      menuItem("Irreproducible Discovery Rate", tabName = "idr", icon = icon("chart-bar"))
+      menuItem("Irreproducible Discovery Rate", tabName = "idr", icon = icon("chart-scatter"))
       )
   ),
   dashboardBody(
@@ -59,16 +59,36 @@ dashboardPage(
         box(fileInput("atac_file1_idr", "Upload Replicate 1 Peaks File (.narrowPeaks)"),
         fileInput("atac_file2_idr", "Upload Replicate 2 Peaks File (.narrowPeaks)"),
         actionButton("generate_button_idr", "Generate Figure"),
-        actionButton("clear_button_idr", "Clear All"),height = 500),
+        actionButton("clear_button_idr", "Clear All"),
+        br(),
+        br(),
 
-        # box(shinycssloaders::withSpinner(plotlyOutput("idr_plot"), color = "grey"),height = 500),
-        box(
-          h3(textOutput('idr_para')),
-          h3(textOutput('idr_value')),
-          shinycssloaders::withSpinner(plotlyOutput('idr_plot'), color = "grey"),
-          height = 500)
+        h4(shinycssloaders::withSpinner(htmlOutput('idr_para_int'), color = "grey")),
+        h4(textOutput('idr_para')),
+        h4(htmlOutput('idr_value'))
+        
+        ,height = 500),
 
-      ))
+        tabBox(
+          side = "right", height = 500,
+          selected = "Rank",
+          tabPanel("Replicate 2",
+          plotOutput('idr_plot_r2')),
+          tabPanel("Repliacte 1",
+          plotOutput('idr_plot_r1')),
+          tabPanel("Signal",
+          shinycssloaders::withSpinner(plotlyOutput('idr_plot_sig'), color = "grey")),
+          tabPanel("Rank",
+            shinycssloaders::withSpinner(plotlyOutput('idr_plot_rank'), color = "grey"))
+          ),
+          fluidRow(
+         column(width=12,
+         box( 
+          h4("IDR table"),
+          DTOutput('idr_table')
+          ,width = 12))
+
+          )))
 
 
 
